@@ -1,0 +1,24 @@
+{
+  "name": "back_tweet_pookweet",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/pookweek/back_tweet_pookweet.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/pookweek/back_tweet_pookweet/issues"
+  },
+  "homepage": "https://gitlab.com/pookweek/back_tweet_pookweet#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "pg": "^7.12.1"
+  }
+}
