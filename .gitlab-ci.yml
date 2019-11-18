@@ -3,16 +3,6 @@ stages:
   - release
   - deploy
 
-services:
-  - name: docker:dind
-    entrypoint: ['env', '-u', 'DOCKER_HOST']
-    command: ['dockerd-entrypoint.sh']
-
-variables:
-  DOCKER_HOST: tcp://docker:2375/
-  DOCKER_DRIVER: overlay2
-  DOCKER_TLS_CERTDIR: ''
-
 cache:
   paths:
     - node_modules/
@@ -32,7 +22,8 @@ dockerise:
   before_script:
     - docker login -u ${user_repo} -p ${token_repo} ${registry}
   script:
-    - docker build -t ${registry}:latest -t "${registry}:${CI_COMMIT_TAG}" .
+    - docker build -t ${registry}:latest .
+    # - docker build -t ${registry}:latest -t "${registry}:${CI_COMMIT_TAG}" .
     - docker push ${registry}:${CI_COMMIT_TAG}
     - docker push ${registry}:latest
   after_script:
