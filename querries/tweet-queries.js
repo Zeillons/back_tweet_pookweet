@@ -3,15 +3,15 @@ const pool = Utils.pool
 
 
 const getTweetsUser = (request, response) => {
-  const id_user = parseInt(request.params.id_user)
-  if (id_user === null || id_user === '') {
+  const id_user = request.params.id_user
+  if (id_user === null || id_user === '' || id_user === undefined) {
     console.log('Id null')
     response.status(400).json({
       'message': 'The user id can\'t be null or empty'
     })
     return
   }
-  pool.query('SELECT * FROM tweet where id_user = $1 UNION SELECT * from retweet where id_user = $1', [id], (error, results) => {
+  pool.query('SELECT * FROM tweets where id_user = $1', [id], (error, results) => {
     if (error) {
       sendErrorResponse(response, error)
       return
@@ -21,11 +21,11 @@ const getTweetsUser = (request, response) => {
 }
 
 const getTweetsUserFromXToY = (request, response) => {
-  const id_user = parseInt(request.params.id_user)
+  const id_user = request.params.id_user
   const from = parseInt(request.params.from)
   const to = parseInt(request.params.to)
   const numberOfTweets = to - from
-  if (id_user === null || id_user === '') {
+  if (id_user === null || id_user === '' || id_user  === undefined) {
     console.log('Id null')
     response.status(400).json({
       'message': 'The user id can\'t be null or empty'
@@ -39,7 +39,7 @@ const getTweetsUserFromXToY = (request, response) => {
     })
     return
   }
-  pool.query('SELECT * FROM tweet where id_user = $1 UNION SELECT * from retweet where id_user = $1 ORDER BY creation_date ASC LIMIT $2 OFFSET $3', [id,numberOfTweets,from], (error, results) => {
+  pool.query('SELECT * FROM tweets where id_user = $1 ORDER BY creation_date ASC LIMIT $2 OFFSET $3', [id_user,numberOfTweets,from], (error, results) => {
     if (error) {
       sendErrorResponse(response, error)
       return
@@ -49,16 +49,20 @@ const getTweetsUserFromXToY = (request, response) => {
 }
 
 const getTweetById = (request, response) => {
-  const id = parseInt(request.params.id)
-  if (id === null || id === '') {
+  const id = request.params.id
+  if (id === null || id === '' || id === undefined) {
     console.log('Id null')
     response.status(400).json({
+
       'message': 'The id can\'t be null or empty'
     })
     return
   }
 
-  pool.query('SELECT * FROM tweet WHERE id = $1 UNION SELECT * from retweet WHERE id = $1', [id], (error, results) => {//A CHANGER !!!
+  console.log("id : "+id)
+
+  pool.query('SELECT * FROM tweets WHERE id_post = $1',
+   [id], (error, results) => {
     if (error) {
       sendErrorResponse(response, error)
       return
@@ -78,25 +82,15 @@ const createTweet = (request, response) => {
   modified = false
 
   console.log(request.body)
-  if (id_user === null || id_user === '' || message === null || message === '') {
+  if (id_user === null || id_user === '' || id_user === undefined || message === null || message === '' || message === undefined) {
     console.log('Id null')
     response.status(400).json({
       'message': 'The user id and the message can\'t be null or empty'
     })
     return
   }
-  if (id_parent === null || id_parent === '') { //TWEET
-    pool.query('INSERT INTO tweets (media_url, id_user,creation_date,modified,message) VALUES ($1,$2,$3,false,$4)RETURNING id_post',
-      [media_url, id_user, creation_date, modified, message], (error, results) => {
-        if (error) {
-          sendErrorResponse(response, error)
-          return
-        }
-        response.status(201).json(results.rows)
-        return;
-      })
-  } else { //RETWEET
-    pool.query('INSERT INTO retweets (media_url, id_user,creation_date,modified,message,id_parent) VALUES ($1,$2,$3,false,$4,$5)RETURNING id_post',
+   //RETWEET
+    pool.query('INSERT INTO tweets (media_url, id_user,creation_date,modified,message,id_parent) VALUES ($1,$2,$3,$4,$5,$6)RETURNING id_post',
       [media_url, id_user, creation_date, modified, message, id_parent], (error, results) => {
         if (error) {
           sendErrorResponse(response, error)
@@ -105,12 +99,12 @@ const createTweet = (request, response) => {
         response.status(201).json(results.rows)
       })
     return;
-  }
+  
 
 }
 
 const updateTweet = (request, response) => {
-  const id = parseInt(request.params.id)
+  const id = request.params.id
   const {
     media_url,
     id_user,
@@ -118,30 +112,16 @@ const updateTweet = (request, response) => {
     message,
     id_parent
   } = request.body
-  if (id === null || id === '' || id_user === null || id_user === '' || message === null || message === '') {
+  if (id === null || id === '' || id === undefined || id_user === null || id_user === '' || id_user === undefined || message === null || message === '' || message  === undefined) {
     console.log('Id null')
     response.status(400).json({
       'message': 'The tweet id, the user id and the message can\'t be null or empty'
     })
     return
   }
-  if (id_parent === null || id_parent === '') { //tweet
+
     pool.query(
-      'UPDATE tweets SET media_url = $1, id_user = $2,creation_date = $3,modified = true,message = $5 WHERE id = $6',
-      [media_url, id_user, creation_date, modified, message, id],
-      (error, results) => {
-        if (error) {
-          sendErrorResponse(response, error)
-          return
-        }
-        response.status(200).json({
-          'message': `Tweet modified with ID: ${id}`
-        })
-      }
-    )
-  } else {//retweet
-    pool.query(
-      'UPDATE retweets SET media_url = $1, id_user = $2,creation_date = $3,modified = true,message = $5 WHERE id = $6',
+      'UPDATE tweets SET media_url = $1, id_user = $2,creation_date = $3,modified = true,message = $5 WHERE id_post = $6',
       [media_url, id_user, creation_date, modified, message, id],
       (error, results) => {
         if (error) {
@@ -153,11 +133,10 @@ const updateTweet = (request, response) => {
         })
       }
     )
+}
 
-}
-}
 const deleteTweet = (request, response) => {
-  const id = parseInt(request.params.id)
+  const id = request.params.id
   if (id === null || id === '') {
     console.log('Id null')
     response.status(400).json({
@@ -165,23 +144,17 @@ const deleteTweet = (request, response) => {
     })
     return
   }
-  pool.query('DELETE FROM tweets WHERE id = $1', [id], (error, results) => {
+  pool.query('DELETE FROM tweets WHERE id_post = $1', [id], (error, results) => {
     if (error) {
       sendErrorResponse(response, error)
       return
     }
-    pool.query('DELETE FROM retweets WHERE id = $1', [id], (error, results) => {
-      if (error) {
-        sendErrorResponse(response, error)
-        return
-      }
       response.status(200).json({
         'message': `Tweet or retweet deleted with ID: ${id}`
       })
     })
-  })
-
 }
+
 const sendErrorResponse = (response, error) => {
   if (error.code === 'ETIMEDOUT') {
     response.status(504).json({

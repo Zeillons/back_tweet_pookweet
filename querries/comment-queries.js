@@ -3,15 +3,15 @@ const pool = Utils.pool
 
 
 const getCommentsOfTweet = (request, response) => {
-    const id = parseInt(request.params.id)
-    if (id === null || id === '') {
+    const id = request.params.id
+    if (id === null || id === '' || id === undefined) {
         console.log('Id null')
         response.status(400).json({
             'message': 'The tweet id can\'t be null or empty'
         })
         return
     }
-    pool.query('SELECT * FROM comments ORDER BY id_post ASC', (error, results) => {
+    pool.query('SELECT * FROM comments WHERE id_parent = $1',[id], (error, results) => {
         if (error) {
             sendErrorResponse(response, error)
             return
@@ -21,8 +21,8 @@ const getCommentsOfTweet = (request, response) => {
 }
 
 const getCommentById = (request, response) => {
-    const id = parseInt(request.params.id)
-    if (id === null || id === '') {
+    const id = request.params.id
+    if (id === null || id === '' || id === undefined) {
         console.log('Id null')
         response.status(400).json({
             'message': 'The id can\'t be null or empty'
@@ -30,7 +30,7 @@ const getCommentById = (request, response) => {
         return
     }
 
-    pool.query('SELECT * FROM comments WHERE id = $1', [id], (error, results) => {
+    pool.query('SELECT * FROM comments WHERE id_post = $1', [id], (error, results) => {
         if (error) {
             sendErrorResponse(response, error)
             return
@@ -41,14 +41,17 @@ const getCommentById = (request, response) => {
 
 const createCommentForTweet = (request, response) => {
     
-    const id = parseInt(request.params.id)
+    const id = request.params.id
     const {
         media_url,
         id_user,
         creation_date,
         message
     } = request.body
-    if (id === null || id === '' || id_user === null || id_user === '' || message === null || message === '') {
+    const modified = false;
+    if (id === null || id === '' || id === undefined
+    || id_user === null || id_user === '' || id_user === undefined ||
+     message === null || message === '' || message === undefined) {
         console.log('Id null')
         response.status(400).json({
             'message': 'The tweet id, the user id and the message can\'t be null or empty'
@@ -56,7 +59,7 @@ const createCommentForTweet = (request, response) => {
         return
     }
     console.log(request.body)
-    pool.query('INSERT INTO comments (media_url, id_user,creation_date,modified,message,id_parent) VALUES ($1,$2,$3,false,$4,$5)RETURNING id_post',
+    pool.query('INSERT INTO comments (media_url, id_user,creation_date,modified,message,id_parent) VALUES ($1,$2,$3,$4,$5,$6)RETURNING id_post',
         [media_url, id_user, creation_date, modified, message,id], (error, results) => {
             if (error) {
                 sendErrorResponse(response, error)
@@ -67,14 +70,17 @@ const createCommentForTweet = (request, response) => {
 }
 
 const updateComment = (request, response) => {
-    const id = parseInt(request.params.id)
+    const id = request.params.id
     const {
         media_url,
         id_user,
         creation_date,
-        message
+        message,
     } = request.body
-    if (id === null || id === '' || id_user === null || id_user === '' || message === null || message === '') {
+    const modified = true
+    if (id === null || id === '' || id === undefined 
+    || id_user === null || id_user === '' ||id_user === undefined
+    || message === null || message === '' || message === undefined) {
         console.log('Id null')
         response.status(400).json({
             'message': 'The comment id, the user id and the message can\'t be null or empty'
@@ -82,8 +88,8 @@ const updateComment = (request, response) => {
         return
     }
     pool.query(
-        'UPDATE comments SET media_url = $1, id_user = $2,creation_date = $3,modified = true,message = $5 WHERE id = $6',
-        [media_url, id_user, creation_date, modified, message, id],
+        'UPDATE comments SET media_url = $1, id_user = $2,creation_date = $3,modified = $4,message = $5 WHERE id_post = $6',
+        [media_url, id_user, creation_date, modified, message,id],
         (error, results) => {
             if (error) {
                 sendErrorResponse(response, error)
@@ -96,15 +102,15 @@ const updateComment = (request, response) => {
     )
 }
 const deleteComment = (request, response) => {
-    const id = parseInt(request.params.id)
-    if (id === null || id === '') {
+    const id = request.params.id
+    if (id === null || id === '' || id === undefined) {
         console.log('Id null')
         response.status(400).json({
             'message': 'The id can\'t be null or empty'
         })
         return
     }
-    pool.query('DELETE FROM comments WHERE id = $1', [id], (error, results) => {
+    pool.query('DELETE FROM comments WHERE id_post = $1', [id], (error, results) => {
         if (error) {
             sendErrorResponse(response, error)
             return
