@@ -9,7 +9,7 @@ build:
   script:
     - npm install
 
-release_tag:
+docker:
   stage: release
   image: docker:latest
   only:
