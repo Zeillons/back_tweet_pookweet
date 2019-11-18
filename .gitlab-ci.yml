@@ -3,20 +3,11 @@ stages:
   - release
   - deploy
 
-cache:
-  paths:
-    - nodes_modules/
-
 build:
   stage: build
   image: node:12-alpine
-  variables:
-    NODE_ENV: 'development'
   script:
     - npm install
-  artifacts:
-    paths:
-      - nodes_modules/
 
 release_tag:
   stage: release
