@@ -1,9 +1,11 @@
-cache:
-  paths:
-    - nodes_modules/
-
 stages:
   - build
+  - release
+  - deploy
+
+  cache:
+  paths:
+    - nodes_modules/
 
 build:
   stage: build
