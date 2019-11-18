@@ -1,0 +1,33 @@
+cache:
+  paths:
+    - nodes_modules/
+
+stages:
+  - build
+
+build:
+  stage: build
+  image: node:12-alpine
+  variables:
+    NODE_ENV: 'development'
+  script:
+    - npm install
+  artifacts:
+    paths:
+      - nodes_modules/
+
+release_tag:
+  stage: release
+  image: docker:latest
+  only:
+    - tags
+  before_script:
+    - docker login -u ${user_repo} -p ${token_repo} ${registry}
+  script:
+    - docker build -t ${registry}:latest -t "${registry}:${CI_COMMIT_TAG}" .
+    - docker push ${registry}:${CI_COMMIT_TAG}
+    - docker push ${registry}:latest
+  after_script:
+    - docker logout
+  tags:
+    - docker
