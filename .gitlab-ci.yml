@@ -19,8 +19,6 @@ build:
 dockerise:
   stage: build
   image: docker:latest
-  only:
-    - tags
   before_script:
     - docker login -u ${user_repo} -p ${token_repo} ${registry}
   script:
