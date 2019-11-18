@@ -27,7 +27,7 @@ build:
       - node_modules/
 
 dockerise:
-  stage: release
+  stage: deploy
   image: docker:latest
   only:
     - tags
