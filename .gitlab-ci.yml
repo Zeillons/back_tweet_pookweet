@@ -3,7 +3,7 @@ stages:
   - release
   - deploy
 
-  cache:
+cache:
   paths:
     - nodes_modules/
 
