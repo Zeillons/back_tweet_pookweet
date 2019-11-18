@@ -3,6 +3,16 @@ stages:
   - release
   - deploy
 
+services:
+  - name: docker:dind
+    entrypoint: ['env', '-u', 'DOCKER_HOST']
+    command: ['dockerd-entrypoint.sh']
+
+variables:
+  DOCKER_HOST: tcp://docker:2375/
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ''
+
 cache:
   paths:
     - node_modules/
@@ -17,7 +27,7 @@ build:
       - node_modules/
 
 dockerise:
-  stage: build
+  stage: release
   image: docker:latest
   before_script:
     - docker login -u ${user_repo} -p ${token_repo} ${registry}
