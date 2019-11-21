@@ -1,4 +1,5 @@
 const Utils = require('../utils')
+const jwt = require('jsonwebtoken');
 const format = require('pg-format')
 const pool = Utils.pool
 
@@ -11,7 +12,7 @@ const getTimelineTweetIdFromXToY = (request, response) => {
   console.log(decoded.payload);
   response.status(200).json(decoded)
   ////////
-  
+
   const {
     id_users
   } = request.body
