@@ -1,13 +1,9 @@
 const Utils = require('../utils')
 const pool = Utils.pool
-
+const jwt = require('jsonwebtoken');
 
 const getTweetsUser = (request, response) => {
   const id_user = request.params.id_user
-
-  
-
-
   if (id_user === null || id_user === '' || id_user === undefined) {
     console.log('Id null')
     response.status(400).json({
@@ -76,9 +72,9 @@ const getTweetById = (request, response) => {
 }
 
 const createTweet = (request, response) => {
+  const id_user = jwt.decode(request.headers.authorization.split(" ")[1]).sub
   const {
     media_url,
-    id_user,
     creation_date,
     message,
     id_parent
@@ -109,9 +105,9 @@ const createTweet = (request, response) => {
 
 const updateTweet = (request, response) => {
   const id = request.params.id
+  const id_user = jwt.decode(request.headers.authorization.split(" ")[1]).sub
   const {
     media_url,
-    id_user,
     creation_date,
     message,
     id_parent

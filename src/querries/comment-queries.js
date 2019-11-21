@@ -1,6 +1,6 @@
 const Utils = require('../utils')
 const pool = Utils.pool
-
+const jwt = require('jsonwebtoken');
 
 const getCommentsOfTweet = (request, response) => {
     const id = request.params.id
@@ -40,11 +40,10 @@ const getCommentById = (request, response) => {
 }
 
 const createCommentForTweet = (request, response) => {
-    
+    const id_user = jwt.decode(request.headers.authorization.split(" ")[1]).sub
     const id = request.params.id
     const {
         media_url,
-        id_user,
         creation_date,
         message
     } = request.body
@@ -70,12 +69,12 @@ const createCommentForTweet = (request, response) => {
 }
 
 const updateComment = (request, response) => {
+    const id_user = jwt.decode(request.headers.authorization.split(" ")[1]).sub
     const id = request.params.id
     const {
         media_url,
-        id_user,
         creation_date,
-        message,
+        message
     } = request.body
     const modified = true
     if (id === null || id === '' || id === undefined 
