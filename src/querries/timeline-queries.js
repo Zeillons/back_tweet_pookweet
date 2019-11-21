@@ -5,10 +5,10 @@ const pool = Utils.pool
 
 const getTimelineTweetIdFromXToY = (request, response) => {
   /// (test) GET CURRENT USER ID
-  var decoded = jwt.decode(request.header.authorization, {
+  var decoded = jwt.decode(request.headers.authorization, {
     complete: true
   });
-  response.status(200).json(request.header.authorization)
+  response.status(200).json(request.headers.authorization)
   ////////
 
   const {
