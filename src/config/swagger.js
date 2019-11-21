@@ -26,7 +26,7 @@ module .exports = {
                 }
             },
             basedir: __dirname, //app absolute path
-            files: ['../../router.js'] //Path to the API handle folder
+            files: ['../router.js'] //Path to the API handle folder
         };
         return expressSwagger(options);
     }
