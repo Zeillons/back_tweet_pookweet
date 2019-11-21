@@ -1,0 +1,17 @@
+cache:
+  paths:
+    - nodes_modules/
+
+stages:
+  - build
+
+build:
+  stage: build
+  image: node:12.10.0
+  variables:
+    NODE_ENV : "development"
+  script:
+    - npm install
+  artifacts:
+    paths:
+      - nodes_modules/

@@ -1,4 +1,5 @@
 const Utils = require('../utils')
+const format = require('pg-format')
 const pool = Utils.pool
 
 const getTimelineTweetIdFromXToY = (request, response) => {
@@ -22,9 +23,10 @@ const getTimelineTweetIdFromXToY = (request, response) => {
       })
       return
     }
-        pool.query('( '+
-        'SELECT id_post, creation_date FROM tweets where id_user IN ( $1 ) '+
-        ' ORDER BY creation_date ASC LIMIT $2 OFFSET $3', [id_users,numberOfTweets,from], (error, results) => {
+    console.log(id_users)
+    const sql = format('SELECT id_post, creation_date FROM tweets where id_user IN (%L) '+
+    ' ORDER BY creation_date ASC LIMIT %L OFFSET %L',id_users,numberOfTweets,from)
+    pool.query(sql, (error, results) => {
       if (error) {
         sendErrorResponse(response, error)
         return
@@ -32,6 +34,19 @@ const getTimelineTweetIdFromXToY = (request, response) => {
       response.status(200).json(results.rows)
     })
   }
+
+  const sendErrorResponse = (response, error) => {
+    if (error.code === 'ETIMEDOUT') {
+      response.status(504).json({
+        'message': 'Database connection timed out'
+      })
+      return
+    }
+    response.status(500).json({
+      'message': 'Erreur lors de la connection a la base de donnée : '+ error
+    })
+  }
+
   module.exports = {
     getTimelineTweetIdFromXToY, //Get tweets ids and date of creation from a timeline (list of followers) withing a range, ex: from the 2nd to the 11st most recent tweet
   }

@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node src/server.js"
   },
   "repository": {
     "type": "git",
@@ -18,7 +18,13 @@
   },
   "homepage": "https://gitlab.com/pookweek/back_tweet_pookweet#readme",
   "dependencies": {
+    "body-parser": "1.9.x",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "pg": "^7.12.1"
+    "express-swagger-generator": "^1.1.15",
+    "minimist": "*",
+    "pg": "^7.12.1",
+    "pg-format": "^1.0.4",
+    "swagger-node-express": "~2.0"
   }
 }

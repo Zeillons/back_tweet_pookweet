@@ -8,10 +8,45 @@ exports.router = (
     function () {
         let apiRouter = express.Router();
 
+    /**
+     * create tweet
+     * @route POST /tweets/{id}
+     * @param {String} id.route.required - user id
+     * @param {String} tweet.form-data - tweet desciption
+     * @returns {object} 201 - The inserted ID
+     * @returns {object} 500 - Internal error
+     * @security JWT
+     */
         apiRouter.route('/tweets').post(dbTweet.createTweet);
+    /**
+     * update tweet
+     * @route PUT /tweets/{id}
+     * @param {String} id.route.required - user id
+     * @param {String} tweet.form-data - tweet desciption
+     * @returns {object} 201 - The modified ID
+     * @returns {object} 500 - Internal error
+     * @security JWT
+     */
+    /**
+     * update user profile
+     * @route DELETE /tweets/{id}
+     * @param {String} id.route.required - user id
+     * @returns {object} 200 - Tweet deleted
+     * @returns {object} 500 - Internal error
+     * @security JWT
+     */
+    /**
+     *  get tweet
+     * @route GET /tweets/{id}
+     * @param {String} id.route.required - tweet id
+     * @returns {Object} 200 - A tweet
+     * @returns {Object} 500 - Internal error
+     * @security JWT
+     */
         apiRouter.route('/tweets/:id').get(dbTweet.getTweetById)
             .put(dbTweet.updateTweet)
             .delete(dbTweet.deleteTweet);
+        //TODO : route a faire
         apiRouter.route('/tweets/users/:id_user').get(dbTweet.getTweetsUser)
         apiRouter.route('/tweets/users/:id_user/:from/:to').get(dbTweet.getTweetsUserFromXToY)
 
