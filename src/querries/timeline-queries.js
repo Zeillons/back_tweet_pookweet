@@ -8,8 +8,6 @@ const getTimelineTweetIdFromXToY = (request, response) => {
   var decoded = jwt.decode(request.header.autorization, {
     complete: true
   });
-  console.log(decoded.header);
-  console.log(decoded.payload);
   response.status(200).json(decoded)
   ////////
 
