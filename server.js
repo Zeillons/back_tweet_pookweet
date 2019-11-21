@@ -1,6 +1,6 @@
 // Listen to the App Engine-specified port, or 8080 otherwise
 require('dotenv').config({
-  path: '/home/thomas/Documents/Projet perso/back_tweet_pookweet/dot.env'
+  path: './dot.env'
 });
 const PORT = process.env.PORT || 8081;
 const express = require('express');
