@@ -38,3 +38,17 @@ dockerise:
     - docker logout
   tags:
     - docker
+
+deploy:
+  stage: deploy
+  image: hublo/kubectl
+  before_script:  
+    - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+    - chmod +x ./kubectl
+    - mv ./kubectl /usr/local/bin/kubectl
+    - sed -e "s/\${k3s_username}/${k3s_username}/" -e "s/\${k3s_password}/${k3s_password}/" -e "s/\${k3s_certificate}/${k3s_certificate}/"  k3s.yaml -i
+  script:
+    - kubectl --kubeconfig="k3s.yaml" rollout restart deployments/tweet 
+  tags :
+    - docker
+
