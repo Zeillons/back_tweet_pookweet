@@ -11,7 +11,7 @@ const getCommentsOfTweet = (request, response) => {
         })
         return
     }
-    pool.query('SELECT * FROM comments WHERE id_parent = $1',[id], (error, results) => {
+    pool.query('SELECT * FROM comments WHERE id_parent = $1 ORDER BY creation_date DESC',[id], (error, results) => {
         if (error) {
             sendErrorResponse(response, error)
             return
