@@ -10,6 +10,7 @@ const app = express();
 const cors = require('cors');
 const request = require('request');
 const boarder = require('body-parser');
+const api_name = 'api-tweet';
 const version = 'v1';
 const swagger_gen = require('./config/swagger');
 var dev = false
@@ -85,7 +86,7 @@ app.use(
 );
 app.use(boarder.json());
 
-app.use('/api/' + version + '', router());
+app.use('/'+api_name+'/' + version + '', router());
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}...`);
