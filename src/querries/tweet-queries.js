@@ -11,7 +11,7 @@ const getTweetsUser = (request, response) => {
     })
     return
   }
-  pool.query('SELECT * FROM tweets where id_user = $1', [id_user], (error, results) => {
+  pool.query('SELECT * FROM tweets where id_user = $1 order by creation_date DESC' , [id_user], (error, results) => {
     if (error) {
       sendErrorResponse(response, error)
       return
@@ -39,7 +39,7 @@ const getTweetsUserFromXToY = (request, response) => {
     })
     return
   }
-  pool.query('SELECT id_post,creation_date FROM tweets where id_user = $1 ORDER BY creation_date ASC LIMIT $2 OFFSET $3', [id_user, numberOfTweets, from], (error, results) => {
+  pool.query('SELECT id_post,creation_date FROM tweets where id_user = $1 ORDER BY creation_date DESC LIMIT $2 OFFSET $3', [id_user, numberOfTweets, from], (error, results) => {
     if (error) {
       sendErrorResponse(response, error)
       return
