@@ -71,6 +71,52 @@ const getTweetById = (request, response) => {
     })
 }
 
+const getRetweets = (request, response) => {
+  const id = request.params.id
+  if (id === null || id === '' || id === undefined) {
+    console.log('Id null')
+    response.status(400).json({
+
+      'message': 'The id can\'t be null or empty'
+    })
+    return
+  }
+
+  console.log("id : " + id)
+
+  pool.query('SELECT id_post FROM tweets WHERE id_parent = $1',
+    [id], (error, results) => {
+      if (error) {
+        sendErrorResponse(response, error)
+        return
+      }
+      response.status(200).json(results.rows)
+    })
+}
+
+const getNumberRetweets = (request, response) => {
+  const id = request.params.id
+  if (id === null || id === '' || id === undefined) {
+    console.log('Id null')
+    response.status(400).json({
+
+      'message': 'The id can\'t be null or empty'
+    })
+    return
+  }
+
+  console.log("id : " + id)
+
+  pool.query('SELECT COUNT(*) FROM tweets WHERE id_parent = $1',
+    [id], (error, results) => {
+      if (error) {
+        sendErrorResponse(response, error)
+        return
+      }
+      response.status(200).json(results.rows)
+    })
+}
+
 const createTweet = (request, response) => {
   const id_user = jwt.decode(request.headers.authorization.split(" ")[1]).sub
   const {
@@ -82,10 +128,10 @@ const createTweet = (request, response) => {
   modified = false
 
   console.log(request.body)
-  if (id_user === null || id_user === '' || id_user === undefined || message === null || message === '' || message === undefined) {
+  if (id_user === null || id_user === '' || id_user === undefined ) {
     console.log('Id null')
     response.status(400).json({
-      'message': 'The user id and the message can\'t be null or empty'
+      'message': 'Can\'t resolve user\'s identity'
     })
     return
   }
@@ -112,10 +158,10 @@ const updateTweet = (request, response) => {
     message,
     id_parent
   } = request.body
-  if (id === null || id === '' || id === undefined || id_user === null || id_user === '' || id_user === undefined || message === null || message === '' || message === undefined) {
+  if (id === null || id === '' || id === undefined || id_user === null || id_user === '' || id_user === undefined) {
     console.log('Id null')
     response.status(400).json({
-      'message': 'The tweet id, the user id and the message can\'t be null or empty'
+      'message': 'Can\'t resolve user\'s identity'
     })
     return
   }
@@ -173,4 +219,6 @@ module.exports = {
   createTweet, //Post a tweet or a retweet
   updateTweet, //Edit a tweet or a retweet
   deleteTweet, //Delete a tweet or a retweet from its ID
+  getRetweets, //Gets a list of all id of retweets
+  getNumberRetweets //Gets the number of retweets
 }

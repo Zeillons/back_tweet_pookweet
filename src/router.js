@@ -85,7 +85,28 @@ exports.router = (
      */
         apiRouter.route('/tweets/:id/comments').get(dbComment.getCommentsOfTweet)
             .post(dbComment.createCommentForTweet);
-              /**
+            
+            /**
+     *  get tweet's retweets ids
+     * @route GET /tweets/{id}/retweets
+     * @param {String} id.route.required - tweet id
+     * @returns {Object} 200 - A list of retweet's id
+     * @returns {Object} 500 - Internal error
+     * @security JWT
+     */
+         apiRouter.route('/tweets/:id/retweets').get(dbTweet.getRetweets);
+         /**
+     *  get tweet's number of retweets
+     * @route GET /tweets/{id}/retweets/number
+     * @param {String} id.route.required - tweet id
+     * @returns {Object} 200 - An integer (number of retweets)
+     * @returns {Object} 500 - Internal error
+     * @security JWT
+     */
+         apiRouter.route('/tweets/:id/retweets/number').get(dbTweet.getNumberRetweets);
+            
+            
+         /**
      * update tweet
      * @route PUT /comments/{id}
      * @param {String} id.route.required - comment id

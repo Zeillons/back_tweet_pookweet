@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const format = require('pg-format')
 const pool = Utils.pool
 var axios = require('axios');
-const URL = "api.yann-cloarec.ninja/api/v1/follows/";
+const URL = "api.yann-cloarec.ninja/api-follow/v1/follows/";
 
 const getTimelineTweetIdFromXToY = (request, response) => {
   const id_user = jwt.decode(request.headers.authorization.split(" ")[1]).sub
@@ -11,6 +11,7 @@ const getTimelineTweetIdFromXToY = (request, response) => {
   axios.get(URL + id_user, {})
     .then((response) => {
       var id_users = JSON.stringify(response.data); //A TESTER !!!
+      console.log(id_users)
       const from = parseInt(request.params.from)
       const to = parseInt(request.params.to)
       const numberOfTweets = to - from
@@ -40,7 +41,9 @@ const getTimelineTweetIdFromXToY = (request, response) => {
       })
 
     }, (error) => {
-      sendErrorResponse(response, error)
+      response.status(500).json({
+        'message': 'Erreur lors de la connection a l\'api follow : ' + error
+      })
       return;
     });
 
