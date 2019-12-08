@@ -104,6 +104,16 @@ exports.router = (
      * @security JWT
      */
          apiRouter.route('/tweets/:id/retweets/number').get(dbTweet.getNumberRetweets);
+
+             /**
+     *  get tweet's number of retweets with no comment
+     * @route GET /tweets/{id}/retweets/number/pure
+     * @param {String} id.route.required - tweet id
+     * @returns {Object} 200 - An integer (number of pure retweets)
+     * @returns {Object} 500 - Internal error
+     * @security JWT
+     */
+    apiRouter.route('/tweets/:id/retweets/number/pure').get(dbTweet.getNumberPureRetweets);
             
             
          /**

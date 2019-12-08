@@ -116,6 +116,28 @@ const getNumberRetweets = (request, response) => {
       response.status(200).json(results.rows)
     })
 }
+const getNumberPureRetweets = (request, response) => {
+  const id = request.params.id
+  if (id === null || id === '' || id === undefined) {
+    console.log('Id null')
+    response.status(400).json({
+
+      'message': 'The id can\'t be null or empty'
+    })
+    return
+  }
+
+  console.log("id : " + id)
+
+  pool.query('SELECT COUNT(*) FROM tweets WHERE id_parent = $1 AND message IN (\'\',null)',
+    [id], (error, results) => {
+      if (error) {
+        sendErrorResponse(response, error)
+        return
+      }
+      response.status(200).json(results.rows)
+    })
+}
 
 const createTweet = (request, response) => {
   const id_user = jwt.decode(request.headers.authorization.split(" ")[1]).sub
@@ -132,6 +154,13 @@ const createTweet = (request, response) => {
     console.log('Id null')
     response.status(400).json({
       'message': 'Can\'t resolve user\'s identity'
+    })
+    return
+  }
+  if ((id_parent === null || id_parent === '' || id_parent === undefined ) && (message === null || message === '' || message === undefined ) ) {
+    console.log('rt')
+    response.status(400).json({
+      'message': 'A tweet needs to contain a message'
     })
     return
   }
@@ -220,5 +249,6 @@ module.exports = {
   updateTweet, //Edit a tweet or a retweet
   deleteTweet, //Delete a tweet or a retweet from its ID
   getRetweets, //Gets a list of all id of retweets
-  getNumberRetweets //Gets the number of retweets
+  getNumberRetweets, //Gets the number of retweets
+  getNumberPureRetweets //Gets the number of retweets
 }
