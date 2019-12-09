@@ -11,7 +11,7 @@ const getTweetsUser = (request, response) => {
     })
     return
   }
-  pool.query('SELECT * FROM tweets where id_user = $1 order by creation_date DESC' , [id_user], (error, results) => {
+  pool.query('SELECT * FROM tweets where id_user = $1 order by creation_date DESC', [id_user], (error, results) => {
     if (error) {
       sendErrorResponse(response, error)
       return
@@ -150,14 +150,14 @@ const createTweet = (request, response) => {
   modified = false
 
   console.log(request.body)
-  if (id_user === null || id_user === '' || id_user === undefined ) {
+  if (id_user === null || id_user === '' || id_user === undefined) {
     console.log('Id null')
     response.status(400).json({
       'message': 'Can\'t resolve user\'s identity'
     })
     return
   }
-  if ((id_parent === null || id_parent === '' || id_parent === undefined ) && (message === null || message === '' || message === undefined ) ) {
+  if ((id_parent === null || id_parent === '' || id_parent === undefined) && (message === null || message === '' || message === undefined)) {
     console.log('rt')
     response.status(400).json({
       'message': 'A tweet needs to contain a message'

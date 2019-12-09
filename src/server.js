@@ -21,7 +21,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 ////////////////////////
 
-var corsOptions = {
+const corsOptions = {
   origin: ['http://localhost:4200', 'http://pookweet.social', 'https://pookweet.social'],
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
@@ -86,8 +86,9 @@ app.use(
 );
 app.use(boarder.json());
 
-app.use('/'+api_name+'/' + version + '', router());
+app.use('/' + api_name + '/' + version + '', router());
 
 app.listen(PORT, () => {
+  console.log('/' + api_name + '/' + version + '');
   console.log(`Server listening on port ${PORT}...`);
 });
