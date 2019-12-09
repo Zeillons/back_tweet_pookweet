@@ -21,7 +21,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 ////////////////////////
 
-var corsOptions = {
+const corsOptions = {
   origin: ['http://localhost:4200', 'http://pookweet.social', 'https://pookweet.social'],
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 };

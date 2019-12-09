@@ -2,7 +2,6 @@ const express = require('express');
 const dbTweet = require('./querries/tweet-queries');
 const dbComment = require('./querries/comment-queries');
 const dbTimeline = require('./querries/timeline-queries');
-const cache = require('./cache');
 
 
 exports.router = (
