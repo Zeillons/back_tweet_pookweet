@@ -140,7 +140,7 @@ const getNumberPureRetweets = (request, response) => {
 }
 const getAllNumberPureRetweets = (request, response) => {
   pool.query('SELECT COUNT(*) FROM tweets WHERE message IN (\'\',null)',
-    [id], (error, results) => {
+    (error, results) => {
       if (error) {
         sendErrorResponse(response, error)
         return
