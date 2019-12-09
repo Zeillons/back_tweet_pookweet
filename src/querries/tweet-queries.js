@@ -2,7 +2,7 @@ const Utils = require('../utils')
 const pool = Utils.pool
 const jwt = require('jsonwebtoken');
 
-const getTweetsUser = (request, response, next) => {
+const getTweetsUser = (request, response) => {
   const id_user = request.params.id_user
   if (id_user === null || id_user === '' || id_user === undefined) {
     console.log('Id null')
