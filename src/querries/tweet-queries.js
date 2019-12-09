@@ -139,7 +139,7 @@ const getNumberPureRetweets = (request, response) => {
     })
 }
 const getAllNumberPureRetweets = (request, response) => {
-  pool.query('SELECT * FROM tweets WHERE message IN (\'\',null)',
+  pool.query('SELECT * FROM tweets WHERE message IS NULL or message =\'\'', 
     (error, results) => {
       if (error) {
         sendErrorResponse(response, error)
