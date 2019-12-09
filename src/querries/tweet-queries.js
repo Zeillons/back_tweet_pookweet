@@ -2,7 +2,7 @@ const Utils = require('../utils')
 const pool = Utils.pool
 const jwt = require('jsonwebtoken');
 
-const getTweetsUser = (request, response) => {
+const getTweetsUser = (request, response, next) => {
   const id_user = request.params.id_user
   if (id_user === null || id_user === '' || id_user === undefined) {
     console.log('Id null')
@@ -11,12 +11,14 @@ const getTweetsUser = (request, response) => {
     })
     return
   }
-  pool.query('SELECT * FROM tweets where id_user = $1 order by creation_date DESC' , [id_user], (error, results) => {
+  pool.query('SELECT * FROM tweets where id_user = $1 order by creation_date DESC', [id_user], (error, results) => {
     if (error) {
       sendErrorResponse(response, error)
       return
     }
+    response.locals.data = results.rows;
     response.status(200).json(results.rows)
+    next()
   })
 }
 
@@ -67,7 +69,9 @@ const getTweetById = (request, response) => {
         sendErrorResponse(response, error)
         return
       }
+      response.locals.data = results.rows;
       response.status(200).json(results.rows)
+      next()
     })
 }
 
@@ -150,14 +154,14 @@ const createTweet = (request, response) => {
   modified = false
 
   console.log(request.body)
-  if (id_user === null || id_user === '' || id_user === undefined ) {
+  if (id_user === null || id_user === '' || id_user === undefined) {
     console.log('Id null')
     response.status(400).json({
       'message': 'Can\'t resolve user\'s identity'
     })
     return
   }
-  if ((id_parent === null || id_parent === '' || id_parent === undefined ) && (message === null || message === '' || message === undefined ) ) {
+  if ((id_parent === null || id_parent === '' || id_parent === undefined) && (message === null || message === '' || message === undefined)) {
     console.log('rt')
     response.status(400).json({
       'message': 'A tweet needs to contain a message'

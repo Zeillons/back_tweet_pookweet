@@ -11,7 +11,7 @@ const getCommentsOfTweet = (request, response) => {
         })
         return
     }
-    pool.query('SELECT * FROM comments WHERE id_parent = $1 ORDER BY creation_date DESC',[id], (error, results) => {
+    pool.query('SELECT * FROM comments WHERE id_parent = $1 ORDER BY creation_date DESC', [id], (error, results) => {
         if (error) {
             sendErrorResponse(response, error)
             return
@@ -48,9 +48,9 @@ const createCommentForTweet = (request, response) => {
         message
     } = request.body
     const modified = false;
-    if (id === null || id === '' || id === undefined
-    || id_user === null || id_user === '' || id_user === undefined ||
-     message === null || message === '' || message === undefined) {
+    if (id === null || id === '' || id === undefined ||
+        id_user === null || id_user === '' || id_user === undefined ||
+        message === null || message === '' || message === undefined) {
         console.log('Id null')
         response.status(400).json({
             'message': 'The tweet id, the user id and the message can\'t be null or empty'
@@ -59,7 +59,7 @@ const createCommentForTweet = (request, response) => {
     }
     console.log(request.body)
     pool.query('INSERT INTO comments (media_url, id_user,creation_date,modified,message,id_parent) VALUES ($1,$2,$3,$4,$5,$6)RETURNING id_post',
-        [media_url, id_user, creation_date, modified, message,id], (error, results) => {
+        [media_url, id_user, creation_date, modified, message, id], (error, results) => {
             if (error) {
                 sendErrorResponse(response, error)
                 return
@@ -77,9 +77,9 @@ const updateComment = (request, response) => {
         message
     } = request.body
     const modified = true
-    if (id === null || id === '' || id === undefined 
-    || id_user === null || id_user === '' ||id_user === undefined
-    || message === null || message === '' || message === undefined) {
+    if (id === null || id === '' || id === undefined ||
+        id_user === null || id_user === '' || id_user === undefined ||
+        message === null || message === '' || message === undefined) {
         console.log('Id null')
         response.status(400).json({
             'message': 'The comment id, the user id and the message can\'t be null or empty'
@@ -88,7 +88,7 @@ const updateComment = (request, response) => {
     }
     pool.query(
         'UPDATE comments SET media_url = $1, id_user = $2,creation_date = $3,modified = $4,message = $5 WHERE id_post = $6',
-        [media_url, id_user, creation_date, modified, message,id],
+        [media_url, id_user, creation_date, modified, message, id],
         (error, results) => {
             if (error) {
                 sendErrorResponse(response, error)
