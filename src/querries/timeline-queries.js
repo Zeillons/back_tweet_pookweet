@@ -3,15 +3,17 @@ const jwt = require('jsonwebtoken');
 const format = require('pg-format')
 const pool = Utils.pool
 var axios = require('axios');
-const URL = "api.yann-cloarec.ninja/api-follow/v1/follows/";
+const URL = "http://api.profil.yann-cloarec.ninja/api-profile/v1/follows/";
 
 const getTimelineTweetIdFromXToY = (request, response) => {
   const id_user = jwt.decode(request.headers.authorization.split(" ")[1]).sub
-
-  axios.get(URL + id_user, {})
-    .then((response) => {
-      var id_users = JSON.stringify(response.data); //A TESTER !!!
-      console.log(id_users)
+  const token = request.headers.authorization.split(" ")[1]
+  const finalUrl = URL+id_user
+  //TEST , sinon : https://stackoverflow.com/questions/44245588/how-to-send-authorization-header-with-axios
+  axios({ method: 'get', url: finalUrl, headers: { Authorization: `Bearer ${token}` } })
+    .then((responseFollow) => {
+      var id_users = responseFollow.data.follows; //A TESTER !!!
+      id_users.push(id_user)
       const from = parseInt(request.params.from)
       const to = parseInt(request.params.to)
       const numberOfTweets = to - from
@@ -32,6 +34,7 @@ const getTimelineTweetIdFromXToY = (request, response) => {
       console.log(id_users)
       const sql = format('SELECT id_post, creation_date FROM tweets where id_user IN (%L) ' +
         ' ORDER BY creation_date ASC LIMIT %L OFFSET %L', id_users, numberOfTweets, from)
+      console.log(sql)
       pool.query(sql, (error, results) => {
         if (error) {
           sendErrorResponse(response, error)

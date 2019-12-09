@@ -11,7 +11,7 @@ module .exports = {
                     version: version.version,
                 },
                 host: process.env.HOST+':'+process.env.listen_port,
-                basePath: '/api/v1',
+                basePath: '/api-tweet/v1',
                 produces: [
                     "application/json"
                 ],

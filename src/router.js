@@ -147,14 +147,14 @@ exports.router = (
 
          /**
      *  get tweets of a timeline (uses follows)
-     * @route POST /timeline/{from}/{to}
+     * @route GET /timeline/{from}/{to}
      * @param {int} from.route.required - index of first tweet (offset)
      * @param {int} to.route.required - index of last tweet
      * @returns {Object} 200 - A list of tweets ids and dates
      * @returns {Object} 500 - Internal error
      * @security JWT
      */
-        apiRouter.route('/timeline/:from/:to').post(dbTimeline.getTimelineTweetIdFromXToY);
+        apiRouter.route('/timeline/:from/:to').get(dbTimeline.getTimelineTweetIdFromXToY);
 
         return apiRouter;
     });
