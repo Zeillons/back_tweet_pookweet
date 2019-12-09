@@ -138,7 +138,16 @@ const getNumberPureRetweets = (request, response) => {
       response.status(200).json(results.rows)
     })
 }
-
+const getAllNumberPureRetweets = (request, response) => {
+  pool.query('SELECT COUNT(*) FROM tweets WHERE message IN (\'\',null)',
+    [id], (error, results) => {
+      if (error) {
+        sendErrorResponse(response, error)
+        return
+      }
+      response.status(200).json(results.rows)
+    })
+}
 const createTweet = (request, response) => {
   const id_user = jwt.decode(request.headers.authorization.split(" ")[1]).sub
   const {
@@ -250,5 +259,6 @@ module.exports = {
   deleteTweet, //Delete a tweet or a retweet from its ID
   getRetweets, //Gets a list of all id of retweets
   getNumberRetweets, //Gets the number of retweets
-  getNumberPureRetweets //Gets the number of retweets
+  getNumberPureRetweets, //Gets the number of retweets
+  getAllNumberPureRetweets,  // //Gets all the pure retweets
 }
