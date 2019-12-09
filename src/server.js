@@ -86,8 +86,9 @@ app.use(
 );
 app.use(boarder.json());
 
-app.use('/'+api_name+'/' + version + '', router());
+app.use('/' + api_name + '/' + version + '', router());
 
 app.listen(PORT, () => {
+  console.log('/' + api_name + '/' + version + '');
   console.log(`Server listening on port ${PORT}...`);
 });

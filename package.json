@@ -26,9 +26,10 @@
     "express-swagger-generator": "^1.1.15",
     "jsonwebtoken": "^8.5.1",
     "minimist": "*",
+    "node-cache": "^5.1.0",
     "pg": "^7.12.1",
     "pg-format": "^1.0.4",
     "request": "^2.88.0",
-    "swagger-node-express": "~2.0"
+    "swagger-node-express": "^2.1.3"
   }
 }
