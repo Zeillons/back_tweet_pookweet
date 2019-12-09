@@ -44,10 +44,7 @@ exports.router = (
          * @returns {Object} 500 - Internal error
          * @security JWT
          */
-        apiRouter.route('/tweets/:id').get(
-                cache.get,
-                dbTweet.getTweetById,
-                cache.set)
+        apiRouter.route('/tweets/:id').get(dbTweet.getTweetById)
             .put(dbTweet.updateTweet)
             .delete(dbTweet.deleteTweet);
         /**
@@ -58,10 +55,7 @@ exports.router = (
          * @returns {Object} 500 - Internal error
          * @security JWT
          */
-        apiRouter.route('/tweets/users/:id_user').get(
-            cache.get,
-            dbTweet.getTweetsUser,
-            cache.set)
+        apiRouter.route('/tweets/users/:id_user').get(dbTweet.getTweetsUser)
         /**
          *  get tweet of user from first index to last index
          * @route GET /tweets/users/{id}/{from}/{to}
