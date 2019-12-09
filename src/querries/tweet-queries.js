@@ -16,9 +16,7 @@ const getTweetsUser = (request, response, next) => {
       sendErrorResponse(response, error)
       return
     }
-    response.locals.data = results.rows;
     response.status(200).json(results.rows)
-    next()
   })
 }
 
@@ -69,9 +67,7 @@ const getTweetById = (request, response) => {
         sendErrorResponse(response, error)
         return
       }
-      response.locals.data = results.rows;
       response.status(200).json(results.rows)
-      next()
     })
 }
 

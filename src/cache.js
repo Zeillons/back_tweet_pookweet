@@ -14,7 +14,6 @@ function getUrlFromRequest(req) {
 
 function set(req, res, next) {
   const url = getUrlFromRequest(req)
-  console.dir(res)
   cache.set(url, res.locals.data)
   return next()
 }
@@ -22,11 +21,25 @@ function set(req, res, next) {
 function get(req, res, next) {
   const url = getUrlFromRequest(req)
   const content = cache.get(url)
-  console.log(content);
   if (content) {
     return res.status(200).send(content)
   }
   return next()
+}
+
+function clear(req, res, next) {
+  cache.keys(function (err, keys) {
+    if (!err) {
+      // again, it depends on your application architecture,
+      // how you would retrive and clear the cache that needs to be cleared.
+      // You may use query path, query params or anything.
+      let resourceUrl = req.baseUrl;
+      const resourceKeys = keys.filter(k => k.includes(resourceUrl));
+
+      cache.del(resourceKeys);
+    }
+  });
+  return next();
 }
 
 module.exports = {
