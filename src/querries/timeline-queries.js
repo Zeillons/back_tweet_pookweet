@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const format = require('pg-format');
 const pool = Utils.pool;
 var axios = require('axios');
-const URL = 'http://api.profil.yann-cloarec.ninja/api-profile/v1/follows/';
+const URL = 'http://api.profil.yann-cloarec.ninja/api-profile/v1/followers/';
 
 const getTimelineTweetIdFromXToY = (request, response) => {
   const id_user = jwt.decode(request.headers.authorization.split(' ')[1]).sub;
