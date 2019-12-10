@@ -8,9 +8,15 @@ const URL = "http://api.profil.yann-cloarec.ninja/api-profile/v1/follows/";
 const getTimelineTweetIdFromXToY = (request, response) => {
   const id_user = jwt.decode(request.headers.authorization.split(" ")[1]).sub
   const token = request.headers.authorization.split(" ")[1]
-  const finalUrl = URL+id_user
+  const finalUrl = URL + id_user
   //TEST , sinon : https://stackoverflow.com/questions/44245588/how-to-send-authorization-header-with-axios
-  axios({ method: 'get', url: finalUrl, headers: { Authorization: `Bearer ${token}` } })
+  axios({
+      method: 'get',
+      url: finalUrl,
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
     .then((responseFollow) => {
       var id_users = responseFollow.data.follows; //A TESTER !!!
       id_users.push(id_user)
@@ -31,9 +37,13 @@ const getTimelineTweetIdFromXToY = (request, response) => {
         })
         return
       }
-      console.log(id_users)
+      const listOfUsers = id_users.map(result => result.follow).filter(result => {
+        if (result !== undefined) {
+          return true
+        }
+      })
       const sql = format('SELECT * FROM tweets where id_user IN (%L) ' +
-        ' ORDER BY creation_date DESC LIMIT %L OFFSET %L', id_users, numberOfTweets, from)
+        ' ORDER BY creation_date DESC LIMIT %L OFFSET %L', listOfUsers, numberOfTweets, from)
       console.log(sql)
       pool.query(sql, (error, results) => {
         if (error) {
