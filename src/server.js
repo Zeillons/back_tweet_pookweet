@@ -14,9 +14,9 @@ const api_name = 'api-tweet';
 const version = 'v1';
 const swagger_gen = require('./config/swagger');
 var dev = false
+swagger_gen.swagger(app);
 
 if (process.env.NODE_ENV === 'development') {
-  swagger_gen.swagger(app);
   dev = true;
 }
 ////////////////////////
