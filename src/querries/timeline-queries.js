@@ -32,8 +32,8 @@ const getTimelineTweetIdFromXToY = (request, response) => {
         return
       }
       console.log(id_users)
-      const sql = format('SELECT id_post, creation_date FROM tweets where id_user IN (%L) ' +
-        ' ORDER BY creation_date ASC LIMIT %L OFFSET %L', id_users, numberOfTweets, from)
+      const sql = format('SELECT * FROM tweets where id_user IN (%L) ' +
+        ' ORDER BY creation_date DESC LIMIT %L OFFSET %L', id_users, numberOfTweets, from)
       console.log(sql)
       pool.query(sql, (error, results) => {
         if (error) {
