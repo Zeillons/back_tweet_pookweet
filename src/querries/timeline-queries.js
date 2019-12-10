@@ -18,7 +18,7 @@ const getTimelineTweetIdFromXToY = (request, response) => {
     }
   }).then(
     responseFollow => {
-      var id_users = responseFollow.data.follows.map(result => result.follow);
+      var id_users = responseFollow.data.followers.map(result => result.follow);
       id_users.push(id_user);
       const from = parseInt(request.params.from);
       const to = parseInt(request.params.to);
