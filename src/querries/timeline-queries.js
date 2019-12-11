@@ -9,7 +9,6 @@ const getTimelineTweetIdFromXToY = (request, response) => {
   const id_user = jwt.decode(request.headers.authorization.split(' ')[1]).sub;
   const token = request.headers.authorization.split(' ')[1];
   const finalUrl = URL + id_user;
-  //TEST , sinon : https://stackoverflow.com/questions/44245588/how-to-send-authorization-header-with-axios
   axios({
     method: 'get',
     url: finalUrl,
