@@ -1,3 +1,5 @@
+<img alt="Logo" src="https://i.ibb.co/WtHcpJ4/Logo.png"/>
+
 # Project POOKWEET
 
 In the context of my studies I made a copy of twitter named pookweet in a group of 4 students. This project covers the following twitter features :
