@@ -16,7 +16,7 @@ The project is managed via kubernetes and is made of 4 api :
 And two front applications, the mobile version being coded in flutter and the web version in Angular.
 The security is handled by keycloak.
 
-<img alt="Missing image: software architecture schema" src="https://ibb.co/hm2K9N9"/>
+<img alt="Missing image: software architecture schema" src="https://i.ibb.co/NyWLCqC/Archi-logicielle.png" />
 
 --> This repositery is the tweet api, handling the CRUD operations for tweets, retweets, comments, and the timeline.
 
