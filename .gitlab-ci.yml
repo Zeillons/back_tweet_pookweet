@@ -1,0 +1,54 @@
+stages:
+  - build
+  - release
+  - deploy
+  
+services:
+  - name: docker:dind
+    entrypoint: ["env", "-u", "DOCKER_HOST"]
+    command: ["dockerd-entrypoint.sh"]
+
+variables:
+  DOCKER_HOST: tcp://docker:2375/
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ""
+
+cache:
+  paths:
+    - node_modules/
+
+build:
+  stage: build
+  image: node:12-alpine
+  script:
+    - npm install
+  artifacts:
+    paths:
+      - node_modules/
+
+dockerise:
+  stage: release
+  image: docker:latest
+  before_script:
+    - docker login -u ${user_repo} -p ${token_repo} ${registry}
+  script:
+    - docker build -t ${registry}:latest .
+    - docker push ${registry}:latest
+  after_script:
+    - docker logout
+  tags:
+    - docker
+
+deploy:
+  stage: deploy
+  image: hublo/kubectl
+  before_script:  
+    - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+    - chmod +x ./kubectl
+    - mv ./kubectl /usr/local/bin/kubectl
+    - sed -e "s/\${k3s_username}/${k3s_username}/" -e "s/\${k3s_password}/${k3s_password}/" -e "s/\${k3s_certificate}/${k3s_certificate}/"  k3s.yaml -i
+  script:
+    - kubectl --kubeconfig="k3s.yaml" rollout restart deployments/tweet 
+  tags :
+    - docker
+
