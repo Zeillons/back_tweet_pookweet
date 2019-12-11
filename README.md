@@ -47,9 +47,22 @@ localhost:8081
 ```
 localhost:8081/api-docs/#/
 ```
+
+### Environement variables 
+
+```
+./dot.env 
+
+NODE_ENV=production OR development
+DB_USER= [Database username]
+DB_HOST= [Database host]
+DB_DATABASE= [Database name]
+DB_PASSWORD= [User password]
+DB_PORT= [Database port]
+```
 ## Deployment
 
-In a production environement the deployment will be fully managed by the CI, after a push, a new build number will be generated, a docker image will be built and the application will be deployed on a kubernetes cluster (stored in Scaleway)
+In a production environement the deployment will be fully managed by the CI (GitLab CI), after a push, a new build number will be generated, a docker image will be built and the application will be deployed on a kubernetes cluster (stored in Scaleway)
 
 ## Built With
 
