@@ -18,7 +18,7 @@ The security is handled by keycloak.
 
 <img alt="Missing image: software architecture schema" src="https://i.ibb.co/NyWLCqC/Archi-logicielle.png" />
 
---> This repositery is the tweet api, handling the CRUD operations for tweets, retweets, comments, and the timeline.
+--> This repository is the tweet api, handling the CRUD operations for tweets, retweets, comments, and the timeline.
 
 ## Getting Started
 
